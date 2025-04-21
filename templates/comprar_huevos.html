@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprar Huevos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+        <!-- Video de fondo -->
+        <div class="video-container">
+            <video autoplay loop muted playsinline>
+                <source src="{{ url_for('static', filename='video/fondo.mp4') }}" type="video/mp4">
+                Tu navegador no soporta videos HTML5.
+            </video>
+        </div>
+    
+    <div class="container">
+        <h1 class="text-center mt-5">Comprar Huevos</h1>
+        <form id="formComprarHuevos" method="POST" class="mt-4">
+            <div class="form-group">
+                <label for="cliente">Seleccione un Cliente:</label>
+                <select id="cliente" name="cliente" class="form-control" required>
+                    <!-- Clientes dinámicos cargados por AJAX -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="tipo">Tipo de Huevo:</label>
+                <select id="tipo" name="tipo" class="form-control" required>
+                    <option value="Rojo">Rojo</option>
+                    <option value="Blanco">Blanco</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="tamaño">Tamaño:</label>
+                <select id="tamaño" name="tamaño" class="form-control" required>
+                    <!-- Opciones de tamaño dinámicas según el tipo -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="cantidad">Cantidad:</label>
+                <select id="cantidad" name="cantidad" class="form-control" required>
+                    <option value="12">Docena (12 huevos)</option>
+                    <option value="30">Cubeta (30 huevos)</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success">Comprar</button>
+        </form>
+    <div id="facturaDiv" class="mt-4" style="display: none;">
+        <button id="btnImprimirFactura" class="btn btn-primary">Imprimir Factura</button>
+    </div>
+        
+    </div>
+
+    <!-- Modal para mostrar mensajes -->
+    <div class="modal fade" id="mensajeModal" tabindex="-1" role="dialog" aria-labelledby="mensajeModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mensajeModalLabel">Resultado</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Aquí se mostrará el mensaje dinámicamente -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center mt-4">
+        <a href="/" class="btn btn-primary">Volver al inicio</a>
+    </div>
+    <script>
+        $(document).ready(function () {
+            // Lista de precios por tipo y tamaño
+            const precios = {
+                Rojo: { A: 12000, AA: 13500, B: 11000, EXTRA: 15000 },
+                Blanco: { A: 10000, AA: 11500, B: 9500, EXTRA: 14000 }
+            };
+    
+            // Cargar lista de clientes dinámicamente
+            $.ajax({
+                url: "/obtener_clientes",
+                method: "GET",
+                success: function (clientes) {
+                    if (clientes.length === 0) {
+                        $(".modal-body").text("No hay clientes disponibles para seleccionar.");
+                        $("#mensajeModal").modal("show");
+                        return;
+                    }
+                    clientes.forEach(function (cliente) {
+                        $("#cliente").append(new Option(cliente.nombre, cliente.identificacion));
+                    });
+                },
+                error: function () {
+                    $(".modal-body").text("Error al cargar la lista de clientes. Verifique la conexión con el servidor.");
+                    $("#mensajeModal").modal("show");
+                }
+            });
+    
+            // Actualizar tamaños según el tipo seleccionado
+            $("#tipo").on("change", function () {
+                const tipo = $(this).val();
+                const tamaños = Object.keys(precios[tipo]);
+                $("#tamaño").empty(); // Limpiar opciones anteriores
+                tamaños.forEach(function (tamaño) {
+                    $("#tamaño").append(new Option(tamaño, tamaño));
+                });
+            });
+    
+            // Inicializar tamaños al cargar la página
+            $("#tipo").trigger("change");
+    
+            // Manejar el envío del formulario
+            $("#formComprarHuevos").on("submit", function (e) {
+                e.preventDefault();
+    
+                const cliente = $("#cliente").val();
+                const tipo = $("#tipo").val();
+                const tamaño = $("#tamaño").val();
+                const cantidad = $("#cantidad").val();
+    
+                // Validar que todos los campos estén completos
+                if (!cliente || !tipo || !tamaño || !cantidad) {
+                    $(".modal-body").text("Por favor, complete todos los campos antes de realizar la compra.");
+                    $("#mensajeModal").modal("show");
+                    return;
+                }
+    
+                // Calcular el precio total
+                const precioUnitario = precios[tipo][tamaño];
+                const total = precioUnitario * parseInt(cantidad);
+    
+                // Enviar datos al servidor
+                $.ajax({
+                    url: "/comprar",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ cliente, tipo, tamaño, cantidad, total }),
+                    success: function (response) {
+                        $(".modal-body").html(`
+                            <strong>${response.mensaje}</strong>
+                            <p>Cliente: ${response.cliente}</p>
+                            <p>Tipo de huevo: ${response.tipo}</p>
+                            <p>Tamaño: ${response.tamaño}</p>
+                            <p>Cantidad comprada: ${response.cantidad}</p>
+                            <p>Total: $${response.total}</p>
+                        `);
+                        $("#mensajeModal").modal("show");
+                        if (response.factura) {
+                        $("#facturaDiv").show();
+                        $("#btnImprimirFactura").off("click").on("click", function () {
+                            window.location.href = `/descargar_factura?archivo=${response.factura}`;
+                        });
+                    }
+
+                    },
+                    error: function (xhr) {
+                        const errorMsg = xhr.responseJSON ? xhr.responseJSON.mensaje : "Error inesperado.";
+                        $(".modal-body").html(`
+                            <strong>Error al realizar la compra:</strong>
+                            <p>${errorMsg}</p>
+                        `);
+                        $("#mensajeModal").modal("show");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+/* Contenedor del video */
+.video-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Asegura que el video esté detrás del contenido */
+    overflow: hidden;
+}
+
+/* Estilo del video para cubrir la pantalla completa */
+.video-container video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cubre toda la pantalla sin deformar el video */
+    transform: translate(-50%, -50%);
+}
+
+/* Contenedor del contenido para que esté encima del video */
+.content {
+    position: relative;
+    z-index: 1; /* Asegura que el contenido esté encima del video */
+    padding: 20px;
+    color: white; /* Ajusta colores según sea necesario */
+}
+/* Contenedor de la tabla */
+.table-container {
+    margin: 20px auto;
+    width: 90%;
+    max-width: 1200px;
+    background-color: #f9f9f9; /* Fondo claro para destacar la tabla */
+    border-radius: 8px; /* Esquinas redondeadas */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    overflow: hidden;
+}
+
+/* Tabla general */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+
+
+/* Filas de la tabla */
+.table tr {
+    transition: background-color 0.3s ease; /* Efecto suave */
+}
+
+/* Filas alternas: blanco y gris */
+.table tr:nth-child(odd) {
+    background-color: #ffffff; /* Blanco para las filas impares */
+}
+
+.table tr:nth-child(even) {
+    background-color: #f0f0f0; /* Gris suave para las filas pares */
+}
+
+/* Celdas de la tabla */
+.table td {
+    padding: 12px;
+    color: #333; /* Letras en escala de gris */
+    font-size: 14px;
+    font-weight: 500; /* Letras resaltadas */
+}
+
+/* Efecto al pasar el cursor */
+.table tr:hover {
+    background-color: #e0e0e0; /* Fondo más oscuro al pasar el cursor */
+}
+
+/* Bordes */
+.table td, .table th {
+    border: 1px solid #ddd;
+}
+
+/* Ajustar las filas alternas de la tabla */
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #e6e6e6 !important; /* Gris claro visible */
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: #ffffff; /* Blanco puro para las filas pares */
+}
+
+/* Letras más visibles */
+.table td, .table th {
+    color: #222; /* Escala de gris oscuro para mejor contraste */
+    font-weight: 600; /* Negrita para mayor visibilidad */
+    font-size: 14px; /* Tamaño de letra adecuado */
+}
+
+/* Resaltar filas al pasar el cursor */
+.table-striped tbody tr:hover {
+    background-color: #d0d0d0; /* Fondo más oscuro al pasar el cursor */
+    transition: background-color 0.3s ease-in-out; /* Efecto suave */
+}
+
+/* Bordes más definidos */
+.table td, .table th {
+    border: 1px solid #ccc; /* Bordes con suficiente contraste */
+}
+
+/* Encabezados principales (h1, h3) */
+h1, h3 {
+    font-family: 'Arial', sans-serif; /* Estilo moderno */
+    text-align: center;
+    text-transform: uppercase;
+    color: #333333; /* Gris oscuro para elegancia */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Efecto de sombreado */
+}
+
+/* Título principal (h1) */
+h1 {
+    display: block; /* Asegura que cada elemento sea un bloque independiente */
+    font-family: 'Arial', sans-serif; /* Estilo limpio y moderno */
+    text-align: center; /* Centrar texto horizontalmente */
+    text-transform: uppercase; /* Texto en mayúsculas */
+    color: #333; /* Gris oscuro para contraste */
+    background: linear-gradient(90deg, #FFC107, #FFD700, #FFF8E1, #FFD700, #FFC107); /* Gradiente animado */
+    background-size: 300%; /* Gradiente expandido para movimiento */
+    -webkit-background-clip: text; /* Recorta el fondo al texto */
+    -webkit-text-fill-color: transparent; /* Texto transparente para mostrar el gradiente */
+    animation: mover-gradiente 5s linear infinite; /* Animación suave */
+    padding: 10px 15px; /* Espaciado interno */
+    border-radius: 8px; /* Bordes redondeados */
+    margin: 0 auto; /* Centra el bloque en el contenedor */
+    margin-bottom: 20px; /* Espaciado entre el título y subtítulo */
+}
+
+/* Subtítulo (h3) */
+h3 {
+    display: block; /* Asegura que esté debajo del título */
+    font-family: 'Arial', sans-serif;
+    text-align: center; /* Centrar texto horizontalmente */
+    text-transform: none; /* Mantén el estilo normal */
+    color: #444; /* Letras gris claro */
+    background: linear-gradient(90deg, #FFD54F, #FFF176, #FFFFFF, #FFF176, #FFD54F); /* Gradiente animado */
+    background-size: 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: mover-gradiente 5s linear infinite;
+    padding: 8px 12px; /* Espaciado interno */
+    border-radius: 6px; /* Bordes redondeados */
+    margin: 0 auto;
+}
+/* Animación del gradiente */
+@keyframes mover-gradiente {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+
+
+
+
+
+/* Encabezados de tabla */
+.table th {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #ffffff; /* Texto blanco */
+    background-color: #4CAF50; /* Verde suave */
+    text-transform: uppercase;
+    padding: 12px;
+}
+
+/* Efecto de sombreado en texto al pasar el cursor */
+.table th:hover {
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Brillo sutil */
+}
+
+/* Ajustar el botón azul para uniformidad */
+.btn-primary {
+    background-color: #007BFF; /* Azul Bootstrap */
+    color: #fff; /* Texto blanco */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px; /* Bordes redondeados */
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Efecto al pasar el cursor */
+.btn-primary:hover {
+    background-color: #0056b3; /* Azul más oscuro */
+    transform: scale(1.05); /* Efecto de aumento al pasar el cursor */
+}
+
+/* Estilo para etiquetas y textos del formulario */
+label, .form-group label {
+    color: #FFA500; /* Naranja vibrante para mayor contraste */
+    font-weight: bold; /* Letras más gruesas */
+    font-size: 16px; /* Tamaño adecuado para legibilidad */
+}
+
+/* Estilo para los campos de entrada */
+input[type="text"], select {
+    color: #333; /* Texto en gris oscuro para los valores ingresados */
+    background-color: #FFF8E1; /* Fondo amarillo suave para resaltar los campos */
+    border: 2px solid #FFA500; /* Borde naranja vibrante */
+    border-radius: 6px; /* Bordes redondeados */
+    padding: 8px;
+    font-size: 16px;
+}
+
+/* Botón "Comprar" */
+button {
+    background-color: #4CAF50; /* Verde llamativo */
+    color: #fff; /* Texto blanco */
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+}
+
+/* Efecto hover en botón */
+button:hover {
+    background-color: #388E3C; /* Verde más oscuro al pasar el cursor */
+}

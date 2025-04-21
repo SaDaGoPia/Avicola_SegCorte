@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Huevos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+        <!-- Video de fondo -->
+        <div class="video-container">
+            <video autoplay loop muted playsinline>
+                <source src="{{ url_for('static', filename='video/fondo.mp4') }}" type="video/mp4">
+                Tu navegador no soporta videos HTML5.
+            </video>
+        </div>
+    
+    <div class="container">
+        <h1 class="text-center mt-5">Registrar Huevos</h1>
+        <form id="formRegistrarHuevos" method="POST" class="mt-4">
+        <div class="form-group">
+                <label for="tipo">Tipo de huevo:</label>
+                <select name="tipo" id="tipo" class="form-control" required>
+                    <option value="Rojo">Rojo</option>
+                    <option value="Blanco">Blanco</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="tamaño">Tamaño:</label>
+                <select name="tamaño" id="tamaño" class="form-control" required>
+                    <option value="A">A</option>
+                    <option value="AA">AA</option>
+                    <option value="B">B</option>
+                    <option value="EXTRA">EXTRA</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="cantidad">Cantidad:</label>
+                <input type="number" name="cantidad" id="cantidad" class="form-control" min="1" required>
+            </div>
+            <button type="submit" class="btn btn-success">Registrar</button>
+            <a href="/" class="btn btn-primary">Volver al Inicio</a>
+        </form>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="mensajeModal" tabindex="-1" role="dialog" aria-labelledby="mensajeModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mensajeModalLabel">Resultado</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Aquí se mostrará el mensaje dinámicamente -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $("#formRegistrarHuevos").on("submit", function (e) {
+                e.preventDefault();
+
+                // Recopilar datos del formulario
+                const tipo = $("#tipo").val();
+                const tamaño = $("#tamaño").val();
+                const cantidad = $("#cantidad").val();
+
+                // Enviar datos al servidor usando AJAX
+                $.ajax({
+                    url: "/registrar_huevos",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ tipo, tamaño, cantidad }),
+                    success: function (response) {
+                        $(".modal-body").text(response.mensaje); // Mensaje de éxito
+                        $("#mensajeModal").modal("show"); // Mostrar modal
+                    },
+                    error: function (xhr) {
+                        $(".modal-body").text("Error al registrar los huevos: " + xhr.responseText);
+                        $("#mensajeModal").modal("show");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

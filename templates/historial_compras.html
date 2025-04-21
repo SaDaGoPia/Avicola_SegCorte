@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de Compras</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+        <!-- Video de fondo -->
+        <div class="video-container">
+            <video autoplay loop muted playsinline>
+                <source src="{{ url_for('static', filename='video/fondo.mp4') }}" type="video/mp4">
+                Tu navegador no soporta videos HTML5.
+            </video>
+        </div>
+    
+    <div class="container">
+        <h1 class="text-center mt-5">Historial de Compras</h1>
+        <table class="table table-striped mt-3">
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Identificación</th>
+                    <th>Tipo de Huevo</th>
+                    <th>Tamaño</th>
+                    <th>Cantidad</th>
+                    <th>Total Pagado</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cliente in historial %}
+                    {% for compra in cliente.compras %}
+                        <tr>
+                            <td>{{ cliente.nombre }}</td>
+                            <td>{{ cliente.identificacion }}</td>
+                            <td>{{ compra.tipo }}</td>
+                            <td>{{ compra.tamaño }}</td>
+                            <td>{{ compra.cantidad }}</td>
+                            <td>${{ compra.total }}</td>
+                            <td>{{ compra.fecha }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="text-center mt-4">
+        <a href="/" class="btn btn-primary">Volver al inicio</a>
+    </div>
+</body>
+</html>
